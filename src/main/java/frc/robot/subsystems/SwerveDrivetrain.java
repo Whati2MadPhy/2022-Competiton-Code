@@ -22,16 +22,16 @@ import edu.wpi.first.math.geometry.Rotation2d;
 public class SwerveDrivetrain extends SubsystemBase {
 
   //these are limits you can change!!!
-  public static final double kMaxSpeed = Units.feetToMeters(13.6); // 20 feet per second
+  public static final double kMaxSpeed = Units.feetToMeters(3.6); // 20 feet per second
   public static final double kMaxAngularSpeed = Math.PI; // 1/2 rotation per second
   public static double feildCalibration = 0;
 
   //this is where you put the angle offsets you got from the smart dashboard
 
-  public static double frontLeftOffset = 0;
-  public static double frontRightOffset = 0;
-  public static double backLeftOffset = 0;
-  public static double backRightOffset = 0;
+  public static double frontLeftOffset = 45.0;
+  public static double frontRightOffset = 135.0;
+  public static double backLeftOffset = 125.0;
+  public static double backRightOffset = 45.0;
 
 
   //put your can Id's here!
