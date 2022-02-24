@@ -14,9 +14,9 @@ public class SwerveDriveCommand extends CommandBase {
   private final XboxController controller;
 
   // Slew rate limiters to make joystick inputs more gentle; 1/3 sec from 0 to 1.
-  private final SlewRateLimiter xspeedLimiter = new SlewRateLimiter(6);
-  private final SlewRateLimiter yspeedLimiter = new SlewRateLimiter(6);
-  private final SlewRateLimiter rotLimiter = new SlewRateLimiter(6);
+  private final SlewRateLimiter xspeedLimiter = new SlewRateLimiter(0.2);
+  private final SlewRateLimiter yspeedLimiter = new SlewRateLimiter(0.2);
+  private final SlewRateLimiter rotLimiter = new SlewRateLimiter(0.2);
 
   public SwerveDriveCommand(SwerveDrivetrain drivetrain, XboxController controller) {
     this.drivetrain = drivetrain;
@@ -45,12 +45,12 @@ public class SwerveDriveCommand extends CommandBase {
     // mathematics). Xbox controllers return positive values when you pull to
     // the right by default.
     final var rot =
-      -rotLimiter.calculate(controller.getRightX())
+      -rotLimiter.calculate(controller.getRawAxis(2))
         * SwerveDrivetrain.kMaxAngularSpeed;
 
     boolean calibrate = controller.getLeftBumper();
 
-    drivetrain.drive(xSpeed, ySpeed, rot, true, calibrate);
+    drivetrain.drive(xSpeed, ySpeed, rot, false, calibrate);
     
   }
 
