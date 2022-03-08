@@ -8,6 +8,34 @@ import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.SwerveDriveCommand;
 import frc.robot.subsystems.SwerveDrivetrain;
 
+
+// import controrller 
+// import commands 
+// import subsystems 
+
+
+//deadzone 
+ 
+//crrerate subsysterms
+//create controllers 
+
+
+// set default command 
+// new buttons for commands  
+
+//get autonomous 
+// test auto
+
+//get drive power
+//get curve power 
+//get second controrlelr josticks  
+
+//clear gyro 
+
+// pneumatics 
+
+
+
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
