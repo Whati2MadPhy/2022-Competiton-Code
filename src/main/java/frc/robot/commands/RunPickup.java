@@ -5,10 +5,14 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.PickupSubsystem;
 
-public class DropOverhang extends CommandBase {
+public class RunPickup extends CommandBase {
+  final PickupSubsystem m_pickupSubsystem;
   /** Creates a new DropOverhang. */
-  public DropOverhang() {
+  public RunPickup(PickupSubsystem pickupSubsystem) {
+    m_pickupSubsystem = pickupSubsystem;
+    addRequirements(pickupSubsystem);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -18,11 +22,15 @@ public class DropOverhang extends CommandBase {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    m_pickupSubsystem.spinPickup(.2);
+  }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    m_pickupSubsystem.stopPickup();
+  }
 
   // Returns true when the command should end.
   @Override

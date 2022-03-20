@@ -14,12 +14,6 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 
-//place holder for pnuematics system 
-//import edu.wpi.first.wpilibj.Compressor;
-//import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.Solenoid;
-//import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-
 
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -29,13 +23,8 @@ public class PickupSubsystem extends SubsystemBase {
   private final MotorController m_pickupMotor = new WPI_VictorSPX(0);
   private final MotorController m_overhangMotor = new WPI_TalonSRX(0);
 
-  //private Compressor compressor = new Compressor(0, null); // Instantiating the compressor establishes the entire pneumatic system
-  private Solenoid dropOverhang = new Solenoid(null, 0);
-
-
   public PickupSubsystem() {
-    dropOverhang.set(false);
-    
+
     //will I need these? 
     //pullMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0); // Tell the motor controllers that there are encoders connected to them
     //pullMotor.setSensorPhase(true); // Inverts the phase of the Encoder
@@ -59,14 +48,12 @@ public class PickupSubsystem extends SubsystemBase {
 
   //drop  overhang
   public void disengageDrop(){
-    dropOverhang.set(false);
   }
   public void engageDrop(){
-    dropOverhang.set(true);
   } 
   
   //release line 
-  public void spinLine(double speed){
+  public void spinReleaseLine(double speed){
     m_overhangMotor.set(-speed);
   }
   public void stopReleaseLine(){

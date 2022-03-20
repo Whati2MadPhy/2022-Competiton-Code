@@ -5,10 +5,15 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.LauncherSubsystem;
 
 public class Launch extends CommandBase {
+  final LauncherSubsystem m_launcherSubsystem;
+
   /** Creates a new Launch. */
-  public Launch() {
+  public Launch(LauncherSubsystem launcherSubsystem  ) {
+    m_launcherSubsystem = launcherSubsystem;
+    addRequirements(launcherSubsystem);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -18,11 +23,15 @@ public class Launch extends CommandBase {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    m_launcherSubsystem.spinSub(.2);
+  }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    m_launcherSubsystem.stopSub();
+  }
 
   // Returns true when the command should end.
   @Override
