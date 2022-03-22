@@ -30,8 +30,8 @@ public class SwerveDrivetrain extends SubsystemBase {
 
   public static double frontLeftOffset = 45.0;
   public static double frontRightOffset = 135.0;
-  public static double backLeftOffset = 125.0;
-  public static double backRightOffset = 45.0;
+  public static double backLeftOffset = 135.0;
+  public static double backRightOffset = 65.0;
 
 
   //put your can Id's here!
