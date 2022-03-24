@@ -5,19 +5,26 @@
 package frc.robot.subsystems;
 
 
-import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
+//import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+
+//import com.revrobotics.CANSparkMax;
+//import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+import frc.robot.Constants;
+
+
 public class LauncherSubsystem extends SubsystemBase {
   /** Creates a new LauncherSubsystem. */
   
-  private final MotorController m_mainMotor = new WPI_TalonSRX(0);
-  private final MotorController m_subMotor = new WPI_VictorSPX(0);
+  private final MotorController m_mainMotor = new WPI_TalonSRX(Constants.launchMainMotorId);
   
+  //private final MotorController m_subMotor = new WPI_VictorSPX(15);
+  private final WPI_TalonSRX m_subMotor = new WPI_TalonSRX(Constants.launchSubMotorId);
   
   public LauncherSubsystem() {}
 

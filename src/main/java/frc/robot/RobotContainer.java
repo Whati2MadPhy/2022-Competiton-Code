@@ -9,35 +9,39 @@ import frc.robot.commands.SwerveDriveCommand;
 import frc.robot.subsystems.SwerveDrivetrain;
 
 // import controrller 
-import edu.wpi.first.wpilibj.GenericHID;
+//import edu.wpi.first.wpilibj.GenericHID;
 
-import javax.print.attribute.standard.Finishings;
+//import javax.print.attribute.standard.Finishings;
 
-import edu.wpi.first.math.filter.SlewRateLimiter;
+//import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 // import commands 
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+//import edu.wpi.first.wpilibj2.command.CommandScheduler;
+//import edu.wpi.first.wpilibj2.command.InstantCommand;
+//import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-
+import frc.robot.commands.AutoSwerveDrive;
+import frc.robot.commands.AutoSwerveTurn;
 import frc.robot.commands.Launch;
 import frc.robot.commands.PullupOverhang;
 import frc.robot.commands.ReleaseOverhang;
 import frc.robot.commands.RunPickup;
 import frc.robot.commands.SpinLauncher;
-import frc.robot.commands.SwerveDriveCommand;
+//import frc.robot.commands.SwerveDriveCommand;
 
 // import subsystems 
 import frc.robot.subsystems.LauncherSubsystem;
 import frc.robot.subsystems.PickupSubsystem;
-import frc.robot.subsystems.SwerveDrivetrain;
+//import frc.robot.subsystems.SwerveDrivetrain;
+
+import frc.robot.Constants;
 
 
 /**
@@ -47,8 +51,8 @@ import frc.robot.subsystems.SwerveDrivetrain;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-//deadzone 
-  public static final double DEAD_ZONE = 0.054321; // used to be 0.1
+  //private Constants constants;
+
 
 //crrerate subsysterms
   private final LauncherSubsystem m_launcherSubsystem = new LauncherSubsystem();
@@ -58,29 +62,105 @@ public class RobotContainer {
 
 //create controllers 
   private final XboxController controller = new XboxController(0);
+  private final XboxController secondary = new XboxController(1);
   
   //thoughts: a  drive controller is already set in drive command so i could just leave that alone and only use secondary here? 
 
 // set default command 
 /** The container for the robot. Contains subsystems, OI devices, and commands. */
-public RobotContainer() {
-}
+  public RobotContainer() {
+    configureButtonBindings();
+  }
 
-// new buttons for commands  
-private void configureButtonBindings()
-{
-  drivetrain.setDefaultCommand(new SwerveDriveCommand(drivetrain, controller));
+  // new buttons for commands  
+  //TODO check button numbers for this 
+  private void configureButtonBindings()
+  {
+    drivetrain.setDefaultCommand(new SwerveDriveCommand(drivetrain, controller));
 
-  new JoystickButton(controller, Button.kA.value).whileHeld(new RunPickup(m_pickupSubsystem));
-  new JoystickButton(controller, Button.kY.value).whileHeld(new Launch(m_launcherSubsystem));
-  new JoystickButton(controller, Button.kX.value).toggleWhenActive(new SpinLauncher(m_launcherSubsystem));
-}
+    new JoystickButton(secondary, Button.kRightBumper.value).whileHeld(new RunPickup(m_pickupSubsystem));
+    new JoystickButton(secondary, Button.kB.value).whileHeld(new ReleaseOverhang(m_pickupSubsystem));
+    new JoystickButton(secondary, Button.kY.value).whileHeld(new PullupOverhang(m_pickupSubsystem));
+  
+    new JoystickButton(secondary, Button.kA.value).whileHeld(new Launch(m_launcherSubsystem));
+    new JoystickButton(secondary, Button.kX.value).toggleWhenActive(new SpinLauncher(m_launcherSubsystem));
+  }
 
 //get autonomous 
+/**
+   * Use this to pass the autonomous command to the main {@link Robot} class.
+   *
+   * @return the command to run in autonomous
+   */
+  public Command getAutonomousCommand() {
+    // An ExampleCommand will run in autonomous
+    //return new AutoVeloDrive(m_driveSubsystem).withTimeout(3.0);
+    return testAuto();
+  }
 // test auto
+  public Command testAuto() {
+    return new AutoSwerveDrive(drivetrain, -.5).withTimeout(5.0)
+    //.andThen(new AutoVeloTurn(m_driveSubsystem, -300.0, -900.0, 90f))
+    //.andThen(new AutoVeloDrive(m_driveSubsystem, -1000.0).withTimeout(2.5))
+    //.andThen(new AutoVeloTurn(m_driveSubsystem, -900.0, -300.0, 90f))
+    //.andThen(new AutoVeloDrive(m_driveSubsystem, -1000.0).withTimeout(1.0))
+    .andThen(new WaitCommand(1.0))
+    .andThen(new AutoSwerveTurn(drivetrain, .5).withTimeout(5.0));
+    
+    //.andThen(new AutoVeloDrive(m_driveSubsystem, 1000.0).withTimeout(1.5))
+    //.andThen(new AutoVeloTurn(m_driveSubsystem, 900.0, 300.0, 90f))
+    //.andThen(new AutoVeloDrive(m_driveSubsystem, 1000.0).withTimeout(2.5))
+    //.andThen(new AutoVeloTurn(m_driveSubsystem, 300.0, 900.0, 90f))
+    //.andThen(new AutoVeloDrive(m_driveSubsystem, 1000.0).withTimeout(1.5));
+  }
+
 
 //get drive power
+
+  /**
+	 * @return the drive power using cubed inputs.
+	 */
+  public double getLeftYPower() {
+    double drivePower = -controller.getLeftY();
+    if (Math.abs(drivePower) < Constants.DEAD_ZONE) { 
+      drivePower = 0.0;
+    }
+    //might change 
+    //return Math.pow((drivePower * 0.95) , 3.0); // 0.75 works
+    //might be able to take off this math and just return power
+    return drivePower; 
+  }
+
+
+  public double getLeftXPower() {
+    double drivePower = -controller.getLeftX();
+    if (Math.abs(drivePower) < Constants.DEAD_ZONE) { 
+      drivePower = 0.0;
+    }
+    //might change 
+    //return Math.pow((drivePower * 0.95) , 3.0); // 0.75 works
+    //might be able to take off this math and just return power
+    return drivePower; 
+  }
+
+
 //get curve power 
+
+/**
+	 * @return the drive power using inputs to the third.
+	 */
+	public double getCurvePower() {
+		double curvePower = controller.getRawAxis(2);
+		if (Math.abs(curvePower) < Constants.DEAD_ZONE) {
+			curvePower = 0.0;
+		}
+		//return Math.pow((curvePower * 0.85) , 3.0); 
+    //might be able to take off this math and just return power
+    return curvePower;  
+  }
+
+
+
 //get second controrlelr josticks  
 
 //clear gyro 

@@ -14,14 +14,14 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 
-
+import frc.robot.Constants;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class PickupSubsystem extends SubsystemBase {
   /** Creates a new LaucherSystem. */
-  private final MotorController m_pickupMotor = new WPI_VictorSPX(0);
-  private final MotorController m_overhangMotor = new WPI_TalonSRX(0);
+  private final MotorController m_pickupMotor = new WPI_VictorSPX(Constants.pickupMotorId);
+  private final MotorController m_overhangMotor = new WPI_TalonSRX(Constants.releaseMotorId);
 
   public PickupSubsystem() {
 
@@ -39,7 +39,7 @@ public class PickupSubsystem extends SubsystemBase {
 
   //spin front motor
   public void spinPickup(double speed){
-    m_pickupMotor.set(-speed);
+    m_pickupMotor.set(speed);
   }
   public void stopPickup(){
     m_pickupMotor.set(0.0);
