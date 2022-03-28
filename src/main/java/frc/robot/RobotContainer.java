@@ -22,6 +22,8 @@ import edu.wpi.first.wpilibj.XboxController.Button;
 // import commands 
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 //import edu.wpi.first.wpilibj2.command.CommandScheduler;
 //import edu.wpi.first.wpilibj2.command.InstantCommand;
 //import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -35,7 +37,7 @@ import frc.robot.commands.ReleaseOverhang;
 import frc.robot.commands.RunPickup;
 import frc.robot.commands.SpinLauncher;
 //import frc.robot.commands.SwerveDriveCommand;
-
+import frc.robot.subsystems.FlyWheelSubsystem;
 // import subsystems 
 import frc.robot.subsystems.LauncherSubsystem;
 import frc.robot.subsystems.PickupSubsystem;
@@ -55,6 +57,8 @@ public class RobotContainer {
 
 
 //crrerate subsysterms
+
+  private final FlyWheelSubsystem m_flyWheelSubsystem = new FlyWheelSubsystem();
   private final LauncherSubsystem m_launcherSubsystem = new LauncherSubsystem();
   private final PickupSubsystem m_pickupSubsystem = new PickupSubsystem();
   private final SwerveDrivetrain drivetrain = new SwerveDrivetrain();
@@ -78,12 +82,13 @@ public class RobotContainer {
   {
     drivetrain.setDefaultCommand(new SwerveDriveCommand(drivetrain, controller));
 
-    new JoystickButton(secondary, Button.kRightBumper.value).whileHeld(new RunPickup(m_pickupSubsystem));
-    new JoystickButton(secondary, Button.kB.value).whileHeld(new ReleaseOverhang(m_pickupSubsystem));
-    new JoystickButton(secondary, Button.kY.value).whileHeld(new PullupOverhang(m_pickupSubsystem));
+    //Button.kRightBumper.value
+    new JoystickButton(controller, 6).whileHeld(new RunPickup(m_pickupSubsystem));
+    new JoystickButton(secondary, 4).whileHeld(new ReleaseOverhang(m_pickupSubsystem));
+    new JoystickButton(secondary, 1).whileHeld(new PullupOverhang(m_pickupSubsystem, .4));
   
-    new JoystickButton(secondary, Button.kA.value).whileHeld(new Launch(m_launcherSubsystem));
-    new JoystickButton(secondary, Button.kX.value).toggleWhenActive(new SpinLauncher(m_launcherSubsystem));
+    new JoystickButton(secondary, 5).whileHeld(new Launch(m_launcherSubsystem));
+    new JoystickButton(secondary, 2).whileHeld(new SpinLauncher(m_flyWheelSubsystem));
   }
 
 //get autonomous 
@@ -99,13 +104,19 @@ public class RobotContainer {
   }
 // test auto
   public Command testAuto() {
-    return new AutoSwerveDrive(drivetrain, -.5).withTimeout(5.0)
+    return new AutoSwerveDrive(drivetrain, -.08).withTimeout(1.8)
     //.andThen(new AutoVeloTurn(m_driveSubsystem, -300.0, -900.0, 90f))
     //.andThen(new AutoVeloDrive(m_driveSubsystem, -1000.0).withTimeout(2.5))
     //.andThen(new AutoVeloTurn(m_driveSubsystem, -900.0, -300.0, 90f))
-    //.andThen(new AutoVeloDrive(m_driveSubsystem, -1000.0).withTimeout(1.0))
-    .andThen(new WaitCommand(1.0))
-    .andThen(new AutoSwerveTurn(drivetrain, .5).withTimeout(5.0));
+    //.andThen(new AutoSwerveDrive(drivetrain, -.1).withTimeout(.8)
+    
+    .andThen(new WaitCommand(.50))
+    .andThen(new ParallelCommandGroup(new SpinLauncher(m_flyWheelSubsystem).withTimeout(4.0),
+                                      new SequentialCommandGroup(new WaitCommand(1.0), new Launch(m_launcherSubsystem).withTimeout(.5)) ))
+    //.andThen(new SequentialCommandGroup(new SpinLauncher(m_launcherSubsystem).withTimeout(.5), new Launch(m_launcherSubsystem)))
+    .andThen(new WaitCommand(.5))
+    .andThen(new AutoSwerveTurn(drivetrain, .2).withTimeout(1.0))
+    .andThen(new PullupOverhang(m_pickupSubsystem, .4).withTimeout(2.0));
     
     //.andThen(new AutoVeloDrive(m_driveSubsystem, 1000.0).withTimeout(1.5))
     //.andThen(new AutoVeloTurn(m_driveSubsystem, 900.0, 300.0, 90f))

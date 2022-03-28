@@ -16,32 +16,35 @@ import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.Constants;
-
+//Camera IMport
+import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.CvSink;
+import edu.wpi.first.cscore.CvSource;
 
 public class LauncherSubsystem extends SubsystemBase {
   /** Creates a new LauncherSubsystem. */
   
-  private final MotorController m_mainMotor = new WPI_TalonSRX(Constants.launchMainMotorId);
-  
   //private final MotorController m_subMotor = new WPI_VictorSPX(15);
   private final WPI_TalonSRX m_subMotor = new WPI_TalonSRX(Constants.launchSubMotorId);
   
-  public LauncherSubsystem() {}
+  public LauncherSubsystem() {
+  //HighCamera
+  final UsbCamera visionCamera = CameraServer.startAutomaticCapture(1);
+    visionCamera.setFPS(15);
+    visionCamera.setResolution(300,220);
+    visionCamera.setBrightness(50);
+    CvSink cvSink = CameraServer.getVideo();
+    CvSource outputStream = CameraServer.putVideo("HighCamera", 640, 480);
+  }
+    @Override
 
-  @Override
   public void periodic() {
     // This method will be called once per scheduler run
   }
 
 
-  //toggle main wheel
-  public void spinMain(double speed){
-    m_mainMotor.set(-speed);
-  }
-  public void stopMain(){
-    m_mainMotor.set(0.0);
-    m_mainMotor.stopMotor(); // Extra safe
-  }
+  
 
   //trigger control motor
   public void spinSub(double speed){

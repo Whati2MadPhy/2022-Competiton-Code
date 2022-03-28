@@ -32,10 +32,10 @@ public final class Constants {
     public static final int launchMainMotorId = 18;   
     
     //offsets 
-    public static double frontLeftOffset = 45.0;
-    public static double frontRightOffset = 135.0;
-    public static double backLeftOffset = 135.0;
-    public static double backRightOffset = 65.0;
+    public static double frontLeftOffset = 225.0;
+    public static double frontRightOffset = 320.0;
+    public static double backLeftOffset = 320.0;
+    public static double backRightOffset = 255.0;
 
     //controllers nums
     public static final int driveControllerId = 0;   

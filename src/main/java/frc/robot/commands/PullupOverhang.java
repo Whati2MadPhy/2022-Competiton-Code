@@ -8,10 +8,11 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.PickupSubsystem;
 
 public class PullupOverhang extends CommandBase {
-
+  private final double m_speed;
   /** Creates a new ReleaseOverhang. */
   final PickupSubsystem m_pickupSubsystem;
-  public PullupOverhang(PickupSubsystem pickupSubsystem) {
+  public PullupOverhang(PickupSubsystem pickupSubsystem,double speed) {
+    m_speed = speed;
     m_pickupSubsystem = pickupSubsystem;
     addRequirements(pickupSubsystem);
 
@@ -25,7 +26,7 @@ public class PullupOverhang extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_pickupSubsystem.spinReleaseLine(.4);
+    m_pickupSubsystem.spinReleaseLine(m_speed);
   }
 
   // Called once the command ends or is interrupted.

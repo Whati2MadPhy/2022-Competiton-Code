@@ -43,8 +43,8 @@ public class AutoSwerveDrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_swerveDrivetrain.drive(0, m_speed, 0, false, false);
-  }
+    m_swerveDrivetrain.drive(m_speed, 0, 0, false, false);
+  } 
 
   // Called once the command ends or is interrupted.
   @Override
